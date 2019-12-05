@@ -6,4 +6,9 @@ public class RecuitDeterministe extends Recuit {
         //TODO
         return null;
     }
+
+    @Override
+    public ArrayList<Integer> executer(ArrayList<Integer> array) {
+        return null;
+    }
 }
