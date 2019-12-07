@@ -90,8 +90,7 @@ public class ProblemeVLS extends Probleme {
             String code = (String) stationObject.get("station_code");
             int idStation = Integer.parseInt(code);
             int nbDocks = (int)(long)stationObject.get("nbedock");
-            Station s = new Station(idStation, nbDocks, name);
-            System.out.println(s.toString());
+            Station s = new Station(name,idStation, nbDocks );
             mesStations.add(s);
         }catch(RuntimeException e){
             //a key was missing, the station will be ignored during the simulation
