@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Map;
 
 public class Station {
     //Variables de classe
@@ -11,16 +12,18 @@ public class Station {
     private int x_i; //nb de velos a affecter
     private int k_i; //capacite de la station
     private HashMap<Station, Integer> xi_ij; //demande en direction de chaque station
+    private HashMap<Station, Integer> beta_ij; //nombre de vélos loués en direction de chaque station
 
     //Constructeur
     public Station(String nomStation, int code, int k_i) {
         this.nomStation = nomStation;
         this.code = code;
         this.k_i = k_i;
-        this.c_i = 50;
-        this.v_i = 30;
-        this.w_i = 10;
+        this.c_i = 5;
+        this.v_i = 3;
+        this.w_i = 1;
         this.xi_ij = new HashMap<>();
+        this.beta_ij = new HashMap<>();
     }
 
     //Methodes de classe
@@ -52,6 +55,9 @@ public class Station {
     public HashMap<Station, Integer> getXiij() {
         return this.xi_ij;
     }
+    public HashMap<Station,Integer> getBeta_ij(){
+        return this.beta_ij;
+    }
 
     public void setCi(int ci) {
         this.c_i = ci;
@@ -69,6 +75,9 @@ public class Station {
     public void setXiij(HashMap<Station, Integer> xiij) {
         this.xi_ij = xiij;
     }
+    public void setBeta_ij(HashMap<Station,Integer> betaij){
+        this.beta_ij=betaij;
+    }
 
     @Override
     public String toString() {
@@ -82,4 +91,19 @@ public class Station {
     /*public void ajouterDemandeStochastique(Station sta){
         getXiij().put(sta,ThreadLocalRandom.current().nextInt(0, 2 * k_i + 1)); //demande comprise entre 0 et 2 * capacite de la station
     }*/
+
+    public void calculerResDemande(){ //calcul des beta
+        for (Map.Entry e : getXiij().entrySet()) {
+            Station s = (Station) e.getKey();
+            int demande = s.getXiij().get(this); //demande vers this
+            if(getXi()>=demande) {
+                this.beta_ij.put(s,demande);
+                setXi(x_i-demande);
+            }
+            else{
+                this.beta_ij.put(s,x_i);
+                setXi(0);
+            }
+        }
+    }
 }

@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -54,14 +55,59 @@ public class ProblemeVLS extends Probleme {
     //Méthodes de Probleme
     @Override
     public boolean verifierContraintes(HashMap<Station,Integer> currentSolution) {
-        //TODO
-        return false;
+        for (Map.Entry me : currentSolution.entrySet()) { //on parcourt les stations (i dans l'énoncé)
+            Station s = (Station) me.getKey();
+            int x_i = (int) me.getValue();
+            if (x_i > s.getKi()) { //contrainte 1a de l'énoncé
+                System.out.println("1");
+                return false;
+            }
+            int sommeImoins = 0;
+            int sommeXi_i = 0;
+            int sommeBeta_ij = 0;
+            for(Map.Entry me2 : currentSolution.entrySet()){ //on parcourt une deuxième fois pour avoir les j de l'énoncé
+                Station sta = (Station) me2.getKey();
+                    int bet = s.getBeta_ij().get(sta);
+                    int xiIJ = s.getXiij().get(sta);
+                    int Imoins = xiIJ - x_i;// > 0 ? bet - x_i : 0;
+                    if (bet != xiIJ - Imoins) { //contrainte 1b
+                        System.out.println("2");
+                        System.out.println(bet + "!= " +xiIJ+ " - " +Imoins);
+                        return false;
+                    }
+                    sommeImoins += Imoins;
+                    sommeXi_i += s.getXiij().get(sta);
+                    sommeBeta_ij += s.getBeta_ij().get(sta);
+            }
+            int Iplus = x_i-sommeBeta_ij>0 ? x_i-sommeBeta_ij : 0;
+            if(Iplus - sommeImoins!=x_i-sommeXi_i){ //contrainte 1c
+                System.out.println("3");
+                return false;
+            }
+        }
+        return true;
     }
+
 
     @Override
     public float calculFctObjectif(HashMap<Station,Integer> currentSolution) {
-        //TODO
-        return 0;
+        int sommeCX=0;
+        int sommeAcc=0;
+        for(Map.Entry me : currentSolution.entrySet()){
+            Station s = (Station) me.getKey();
+            int x_i = (int) me.getValue();
+            sommeCX+=s.getCi()*s.getXi();
+            int Imoins=0;
+            int Omoins=x_i-s.getKi();
+            for(Map.Entry m : currentSolution.entrySet()){
+                Station st = (Station) m.getKey();
+                Imoins+= s.getXiij().get(st)-x_i > 0 ? s.getXiij().get(st)-x_i : 0;
+                Omoins+=st.getBeta_ij().get(s)-s.getBeta_ij().get(st);
+            }
+            Omoins = Omoins > 0 ? Omoins : 0;
+            sommeAcc+=s.getVi()*Imoins+s.getWi()*Omoins;
+        }
+        return sommeCX+sommeAcc;
     }
 
     //Méthodes de la classe
@@ -85,6 +131,7 @@ public class ProblemeVLS extends Probleme {
             System.out.println("an unexpected exception was raised, we decline all responsibility");
         }
     }
+
     //appelée par parseData(), crée toutes les instances de stations et les ajoute à mesStations
     public void parseStationObject(JSONObject obj){
         try {
@@ -111,6 +158,9 @@ public class ProblemeVLS extends Probleme {
                     float val = (sta.getKi()+s.getKi())/2; //moyenne entre les deux stations considérées
                     x.put(sta,(int) val);
                 }
+                else{
+                    x.put(sta,0);
+                }
             }
             donneesScenarioMoy.put(s,x);
             s.setXiij(x);
@@ -129,6 +179,9 @@ public class ProblemeVLS extends Probleme {
                         int valSceMoy = scenarioMoyen.getDonnees().get(s).get(sta);
                         double rand = ThreadLocalRandom.current().nextGaussian(); //les scénarios sont répartis selon une gaussienne
                         x.put(sta,valSceMoy+(int)(rand*10));
+                    }
+                    else{
+                        x.put(sta,0);
                     }
                 }
                 donneesScenario.put(s,x);
