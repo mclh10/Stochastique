@@ -9,7 +9,6 @@ public class Main {
                 }
             }
         }
-        //System.out.println(vls.getMesStations().size());
         System.out.println("ça compile (OK)");
     }
 }

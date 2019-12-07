@@ -81,6 +81,6 @@ public class Station {
     }
 
     public void ajouterDemandeStochastique(Station sta){
-        getXiij().put(sta,ThreadLocalRandom.current().nextInt(0, 2 * k_i + 1));
+        getXiij().put(sta,ThreadLocalRandom.current().nextInt(0, 2 * k_i + 1)); //demande comprise entre 0 et 2 * capacite de la station
     }
 }
