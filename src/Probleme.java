@@ -1,22 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Probleme {
 
     //Variables de classe
 
-    protected ArrayList<Integer> solutions;
+    protected HashMap<Station,Integer> solutions;
     protected ArrayList<Scenario> mesScenarios;
     protected ArrayList<Algorithme> mesAlgos;
 
     //Constructeurs
 
     public Probleme() {
-        this.solutions=new ArrayList<>();
+        this.solutions=new HashMap<>();
         this.mesScenarios=new ArrayList<>();
         this.mesAlgos=new ArrayList<>();
     }
 
-    public Probleme(ArrayList<Integer> solutions, ArrayList<Scenario> mesScenarios, ArrayList<Algorithme> mesAlgos) {
+    public Probleme(HashMap<Station,Integer> solutions, ArrayList<Scenario> mesScenarios, ArrayList<Algorithme> mesAlgos) {
         this.solutions = solutions;
         this.mesScenarios = mesScenarios;
         this.mesAlgos = mesAlgos;
@@ -24,7 +25,7 @@ public abstract class Probleme {
 
     //Getters et setters
 
-    public ArrayList<Integer> getSolutions() {
+    public HashMap<Station,Integer> getSolutions() {
         return solutions;
     }
 
@@ -36,7 +37,7 @@ public abstract class Probleme {
         return mesAlgos;
     }
 
-    public void setSolutions(ArrayList<Integer> solutions) {
+    public void setSolutions(HashMap<Station,Integer> solutions) {
         this.solutions = solutions;
     }
 
@@ -49,6 +50,6 @@ public abstract class Probleme {
     }
 
     //méthodes abstraites de classe
-    abstract public boolean verifierContraintes();
-    abstract public float calculFctObjectif(ArrayList<Integer> currentSolution);
+    abstract public boolean verifierContraintes(HashMap<Station,Integer> currentSolution);
+    abstract public float calculFctObjectif(HashMap<Station,Integer> currentSolution);
 }

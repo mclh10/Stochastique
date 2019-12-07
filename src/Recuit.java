@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public abstract class Recuit extends Algorithme {
@@ -8,19 +8,18 @@ public abstract class Recuit extends Algorithme {
     private int palierTemperature;
 
     //M�thodes de classe
-    public abstract ArrayList<Integer> executer (ArrayList<Integer> array);
 
     public boolean calculerCstGibbsBoltz(int a, int b) {
         //TODO
         return false;
     }
 
-    public ArrayList<Integer> calcVoisin(ArrayList<Integer> array) {
+    public HashMap<Station,Integer> calcVoisin(HashMap<Station,Integer> array) {
         //TODO
         return null;
     }
 
-    public ArrayList<Integer> recuit(ArrayList<Integer> array ){
+    public HashMap<Station,Integer> recuit(HashMap<Station,Integer> array ){
         //TODO
         return null;
     }

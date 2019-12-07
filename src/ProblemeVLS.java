@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ProblemeVLS extends Probleme {
@@ -50,13 +51,13 @@ public class ProblemeVLS extends Probleme {
 
     //Méthodes de Probleme
     @Override
-    public boolean verifierContraintes() {
+    public boolean verifierContraintes(HashMap<Station,Integer> currentSolution) {
         //TODO
         return false;
     }
 
     @Override
-    public float calculFctObjectif(ArrayList<Integer> currentSolution) {
+    public float calculFctObjectif(HashMap<Station,Integer> currentSolution) {
         //TODO
         return 0;
     }

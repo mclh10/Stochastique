@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RecuitStochastique extends Recuit {
@@ -11,14 +10,10 @@ public class RecuitStochastique extends Recuit {
     //Methodes de classe
 
     @Override
-    ArrayList<Integer> executer() {
+    HashMap<Station,Integer> executer() {
         return null;
     }
 
-    @Override
-    public ArrayList<Integer> executer(ArrayList<Integer> array) {
-        return null;
-    }
     public boolean egaliteSolutions() {
         //TODO
         return false;

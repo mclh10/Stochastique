@@ -1,18 +1,19 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Scenario {
     //variables de classe
     private ArrayList<Integer> donnees;
-    private ArrayList<Integer> solutionScenario;
+    private HashMap<Station,Integer> solutionScenario;
 
     //constructeurs
 
     public Scenario() {
         this.donnees = new ArrayList<>();
-        this.solutionScenario = new ArrayList<>();
+        this.solutionScenario = new HashMap<>();
     }
 
-    public Scenario(ArrayList<Integer> donnees, ArrayList<Integer> solutionScenario) {
+    public Scenario(ArrayList<Integer> donnees, HashMap<Station,Integer> solutionScenario) {
         this.donnees = donnees;
         this.solutionScenario = solutionScenario;
     }
@@ -27,11 +28,11 @@ public class Scenario {
         this.donnees = donnees;
     }
 
-    public ArrayList<Integer> getSolutionScenario() {
+    public HashMap<Station,Integer> getSolutionScenario() {
         return solutionScenario;
     }
 
-    public void setSolutionScenario(ArrayList<Integer> solutionScenario) {
+    public void setSolutionScenario(HashMap<Station,Integer> solutionScenario) {
         this.solutionScenario = solutionScenario;
     }
 }

@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Algorithme {
     private Probleme probleme;
@@ -8,5 +8,5 @@ public abstract class Algorithme {
     void setMonProbleme(Probleme pb){
         this.probleme = pb;
     }
-    abstract ArrayList<Integer> executer();
+    abstract HashMap<Station,Integer> executer();
 }

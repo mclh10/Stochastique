@@ -1,10 +1,12 @@
 import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Cplex {
+public class Cplex extends Algorithme {
     private File modele;
-    public ArrayList<Integer> executer(ArrayList<Integer> entry){
+
+    @Override
+    public HashMap<Station,Integer> executer(){
         // TODO
-        return entry;
+        return new HashMap<>();
     }
 }

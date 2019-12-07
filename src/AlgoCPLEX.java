@@ -1,8 +1,8 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AlgoCPLEX extends Algorithme {
     @Override
-    ArrayList<Integer> executer() {
+    HashMap<Station,Integer> executer() {
         //TODO
         return null;
     }

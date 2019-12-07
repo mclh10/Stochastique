@@ -1,14 +1,10 @@
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecuitDeterministe extends Recuit {
     @Override
-    ArrayList<Integer> executer() {
+    HashMap<Station,Integer> executer() {
         //TODO
         return null;
     }
 
-    @Override
-    public ArrayList<Integer> executer(ArrayList<Integer> array) {
-        return null;
-    }
 }
