@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ProblemeVLS extends Probleme {
 
-    //Variables de classe
+    // Variables de classe
     private String nomFichier;
     private int velosTotaux;
     private ArrayList<Station> mesStations;
