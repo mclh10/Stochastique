@@ -60,30 +60,31 @@ public class ProblemeVLS extends Probleme {
             Station s = (Station) me.getKey();
             int x_i = (int) me.getValue();
             if (x_i > s.getKi()) { //contrainte 1a de l'énoncé
-                System.out.println("1");
+                //System.out.println("1");
                 return false;
             }
-            int sommeImoins = 0;
-            int sommeXi_i = 0;
-            int sommeBeta_ij = 0;
-            for(Map.Entry me2 : currentSolution.entrySet()){ //on parcourt une deuxième fois pour avoir les j de l'énoncé
-                Station sta = (Station) me2.getKey();
-                    int bet = s.getBeta_ij().get(sta);
-                    int xiIJ = s.getXiij().get(sta);
-                    int Imoins = xiIJ - x_i;// > 0 ? bet - x_i : 0;
-                    if (bet != xiIJ - Imoins) { //contrainte 1b
-                        /*System.out.println("2");
-                        System.out.println(bet + "!= " +xiIJ+ " - " +Imoins);*/
+            for(Scenario scenario : this.getMesScenarios()){
+                int sumImoins = 0;
+                int sumXi = 0;
+                int sumBeta = 0;
+                for(Map.Entry me2 : currentSolution.entrySet()) { //on parcourt une deuxième fois pour avoir les j de l'énoncé
+                    Station j = (Station) me2.getKey();
+                    int beta_ijs = scenario.getBeta().get(s).get(j);
+                    int xi_ijs = scenario.getDonnees().get(s).get(j);
+                    int Imoins = beta_ijs - x_i; //>0 ? beta_ijs -x_i :0;
+                    if (beta_ijs != xi_ijs - Imoins) { //contrainte 1b
+                        //System.out.println("2");
                         return false;
                     }
-                    sommeImoins += Imoins;
-                    sommeXi_i += s.getXiij().get(sta);
-                    sommeBeta_ij += s.getBeta_ij().get(sta);
-            }
-            int Iplus = x_i-sommeBeta_ij>0 ? x_i-sommeBeta_ij : 0;
-            if(Iplus - sommeImoins!=x_i-sommeXi_i){ //contrainte 1c
-                System.out.println("3");
-                return false;
+                    sumImoins+=Imoins;
+                    sumXi+=xi_ijs;
+                    sumBeta+=beta_ijs;
+                }
+                int Iplus = x_i - sumBeta > 0 ? x_i - sumBeta : 0 ;
+                if(Iplus - sumImoins!=x_i-sumXi){ //contrainte 1c
+                    //System.out.println("3");
+                    return false;
+                }
             }
         }
         return true;
@@ -122,15 +123,6 @@ public class ProblemeVLS extends Probleme {
                 Omoins += sumBeta_ijs - sumBeta_jis;
                 Omoins = Omoins > 0 ? Omoins : 0;
                 sommeAcc += s.getVi()*Imoins+s.getWi()*Omoins;
-                /*int Imoins = 0;
-                int Omoins = x_i - s.getKi();
-                for (Map.Entry m : currentSolution.entrySet()) {
-                    Station st = (Station) m.getKey();
-                    Imoins += s.getXiij().get(st) - x_i > 0 ? s.getXiij().get(st) - x_i : 0;
-                    Omoins += st.getBeta_ij().get(s) - s.getBeta_ij().get(st);
-                }
-                Omoins = Omoins > 0 ? Omoins : 0;
-                sommeAcc += s.getVi() * Imoins + s.getWi() * Omoins;*/
             }
             sommeScenar += sce.getProba()*sommeAcc;
         }

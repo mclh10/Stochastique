@@ -7,9 +7,6 @@ public class Main {
         vls.parseData();
         int x =1; //nb scénarios à générer
         vls.genererScenarios(x);
-        for(Station s : vls.getMesStations()){
-            s.calculerResDemande();
-        }
         HashMap<Station,Integer> sol = new HashMap<>();
         for(Station s : vls.getMesStations()){
             sol.put(s,0);
@@ -17,7 +14,6 @@ public class Main {
         if(vls.verifierContraintes(sol)){
             System.out.println(vls.calculFctObjectif(sol));
         }
-        System.out.println(vls.calculFctObjectif(sol));
         System.out.println("ça compile (OK)");
     }
 }
