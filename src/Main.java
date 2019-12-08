@@ -17,6 +17,7 @@ public class Main {
         if(vls.verifierContraintes(sol)){
             System.out.println(vls.calculFctObjectif(sol));
         }
+        System.out.println(vls.calculFctObjectif(sol));
         System.out.println("ça compile (OK)");
     }
 }

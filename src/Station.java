@@ -19,9 +19,9 @@ public class Station {
         this.nomStation = nomStation;
         this.code = code;
         this.k_i = k_i;
-        this.c_i = 5;
-        this.v_i = 3;
-        this.w_i = 1;
+        this.c_i = 50;
+        this.v_i = 30;
+        this.w_i = 10;
         this.xi_ij = new HashMap<>();
         this.beta_ij = new HashMap<>();
     }
@@ -92,7 +92,7 @@ public class Station {
         getXiij().put(sta,ThreadLocalRandom.current().nextInt(0, 2 * k_i + 1)); //demande comprise entre 0 et 2 * capacite de la station
     }*/
 
-    public void calculerResDemande(){ //calcul des beta
+    public HashMap<Station,Integer> calculerResDemande(){ //calcul des beta
         for (Map.Entry e : getXiij().entrySet()) {
             Station s = (Station) e.getKey();
             int demande = s.getXiij().get(this); //demande vers this
@@ -105,5 +105,6 @@ public class Station {
                 setXi(0);
             }
         }
+        return this.beta_ij;
     }
 }

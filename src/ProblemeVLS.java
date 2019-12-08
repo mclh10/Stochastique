@@ -21,9 +21,10 @@ public class ProblemeVLS extends Probleme {
 
     //Constructeur
     public ProblemeVLS() {
-        this.nomFichier="velib-disponibilite-en-temps-reel.json";
-        this.velosTotaux=0;
-        this.mesStations=new ArrayList<>();
+        super();
+        this.nomFichier = "velib-disponibilite-en-temps-reel.json";
+        this.velosTotaux = 0;
+        this.mesStations = new ArrayList<>();
     }
 
     //Getters et setters
@@ -71,8 +72,8 @@ public class ProblemeVLS extends Probleme {
                     int xiIJ = s.getXiij().get(sta);
                     int Imoins = xiIJ - x_i;// > 0 ? bet - x_i : 0;
                     if (bet != xiIJ - Imoins) { //contrainte 1b
-                        System.out.println("2");
-                        System.out.println(bet + "!= " +xiIJ+ " - " +Imoins);
+                        /*System.out.println("2");
+                        System.out.println(bet + "!= " +xiIJ+ " - " +Imoins);*/
                         return false;
                     }
                     sommeImoins += Imoins;
@@ -92,22 +93,48 @@ public class ProblemeVLS extends Probleme {
     @Override
     public float calculFctObjectif(HashMap<Station,Integer> currentSolution) {
         int sommeCX=0;
-        int sommeAcc=0;
-        for(Map.Entry me : currentSolution.entrySet()){
+        for(Map.Entry me : currentSolution.entrySet()) {
             Station s = (Station) me.getKey();
             int x_i = (int) me.getValue();
-            sommeCX+=s.getCi()*s.getXi();
-            int Imoins=0;
-            int Omoins=x_i-s.getKi();
-            for(Map.Entry m : currentSolution.entrySet()){
-                Station st = (Station) m.getKey();
-                Imoins+= s.getXiij().get(st)-x_i > 0 ? s.getXiij().get(st)-x_i : 0;
-                Omoins+=st.getBeta_ij().get(s)-s.getBeta_ij().get(st);
-            }
-            Omoins = Omoins > 0 ? Omoins : 0;
-            sommeAcc+=s.getVi()*Imoins+s.getWi()*Omoins;
+            sommeCX += s.getCi() * s.getXi();
         }
-        return sommeCX+sommeAcc;
+        int sommeScenar=0;
+        for(Scenario sce : this.mesScenarios) {
+            int sommeAcc=0;
+            for(Map.Entry me : sce.getDonnees().entrySet()) {
+                Station s = (Station) me.getKey();
+                int x_i = (int) me.getValue();
+                int Imoins = 0;
+                int Omoins = x_i - s.getKi();
+                int sumBeta_ijs=0;
+                int sumBeta_jis=0;
+                for(Map.Entry me2 : sce.getDonnees().entrySet()){
+                    Station j = (Station) me.getKey();
+                    int beta_ijs = sce.getBeta().get(s).get(j);
+                    //calcul de la somme beta_ijs
+                    sumBeta_ijs += beta_ijs;
+                    //calcul de la somme des beta_jis
+                    sumBeta_jis = sce.getBeta().get(j).get(s);
+                    //calcul de la somme des I_ijs_moins
+                    Imoins += beta_ijs - x_i>0 ? beta_ijs - x_i : 0;
+                }
+                //calcul de O_is_moins
+                Omoins += sumBeta_ijs - sumBeta_jis;
+                Omoins = Omoins > 0 ? Omoins : 0;
+                sommeAcc += s.getVi()*Imoins+s.getWi()*Omoins;
+                /*int Imoins = 0;
+                int Omoins = x_i - s.getKi();
+                for (Map.Entry m : currentSolution.entrySet()) {
+                    Station st = (Station) m.getKey();
+                    Imoins += s.getXiij().get(st) - x_i > 0 ? s.getXiij().get(st) - x_i : 0;
+                    Omoins += st.getBeta_ij().get(s) - s.getBeta_ij().get(st);
+                }
+                Omoins = Omoins > 0 ? Omoins : 0;
+                sommeAcc += s.getVi() * Imoins + s.getWi() * Omoins;*/
+            }
+            sommeScenar += sce.getProba()*sommeAcc;
+        }
+        return sommeCX+sommeScenar;
     }
 
     //Méthodes de la classe
@@ -149,6 +176,7 @@ public class ProblemeVLS extends Probleme {
 
     //paramètre : nb de scénarios à générer
     public ArrayList<Scenario> genererScenarios(int nbScenarios){
+        float proba = (float) 1.0/nbScenarios;
         //génération scénario moyen
         HashMap<Station, HashMap<Station,Integer>> donneesScenarioMoy = new HashMap<>();
         for(Station s:this.getMesStations()){
@@ -165,7 +193,11 @@ public class ProblemeVLS extends Probleme {
             donneesScenarioMoy.put(s,x);
             s.setXiij(x);
         }
-        Scenario scenarioMoyen = new Scenario(donneesScenarioMoy,new HashMap<>());
+        HashMap<Station,HashMap<Station,Integer>> betaScenar = new HashMap<>();
+        for(Station s: this.getMesStations()){
+            betaScenar.put(s,s.calculerResDemande());
+        }
+        Scenario scenarioMoyen = new Scenario(donneesScenarioMoy,betaScenar,new HashMap<>(),proba);
 
         //création des scénarios à partir du scénario moyen
         ArrayList<Scenario> listeScenarios = new ArrayList<>();
@@ -185,8 +217,13 @@ public class ProblemeVLS extends Probleme {
                     }
                 }
                 donneesScenario.put(s,x);
+                s.setXiij(x);
             }
-            Scenario sce = new Scenario(donneesScenario,new HashMap<>());
+            HashMap<Station,HashMap<Station,Integer>> betaScenar2 = new HashMap<>();
+            for(Station s: this.getMesStations()){
+                betaScenar2.put(s,s.calculerResDemande());
+            }
+            Scenario sce = new Scenario(donneesScenario,betaScenar2,new HashMap<>(),proba);
             listeScenarios.add(sce);
         }
         return listeScenarios;
