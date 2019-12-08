@@ -15,7 +15,7 @@ public abstract class Recuit extends Algorithme {
         this.temperature = myTemp;
         this.nbIterations = myNbIt;
         this.palierTemperature = myPalierTemp;
-        this.getMonProbleme().setMesScenarios(myScenario);
+        this.scenarioList = myScenario;
     }
     public Recuit(ArrayList<Scenario> myScenario) {
         this.getMonProbleme().setMesScenarios(myScenario);
