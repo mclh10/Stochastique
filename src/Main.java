@@ -21,6 +21,7 @@ public class Main {
         Scenario scen =vls.getMesScenarios().get(0);
         lambda.put(scen,phi);
         System.out.println(vls.calculFctObjSousRecuit(scen,sol,lambda,phi,sol));
+        //System.out.println(vls.calculFctObjGenerale(sol,lambda,phi,sol));
         System.out.println("ça compile (OK)");
     }
 }
