@@ -1,3 +1,5 @@
+package com.stocha;
+
 import java.util.HashMap;
 
 public class Scenario {

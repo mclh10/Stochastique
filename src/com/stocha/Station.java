@@ -1,3 +1,5 @@
+package com.stocha;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,14 +83,14 @@ public class Station {
 
     @Override
     public String toString() {
-        return "Station{" +
+        return "com.stocha.Station{" +
                 "nomStation='" + nomStation + '\'' +
                 ", code=" + code +
                 ", k_i=" + k_i +
                 '}';
     }
 
-    /*public void ajouterDemandeStochastique(Station sta){
+    /*public void ajouterDemandeStochastique(com.stocha.Station sta){
         getXiij().put(sta,ThreadLocalRandom.current().nextInt(0, 2 * k_i + 1)); //demande comprise entre 0 et 2 * capacite de la station
     }*/
 

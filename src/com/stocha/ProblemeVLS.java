@@ -1,3 +1,5 @@
+package com.stocha;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -53,7 +55,7 @@ public class ProblemeVLS extends Probleme {
         this.mesStations = mesStations;
     }
 
-    //Méthodes de Probleme
+    //Méthodes de com.stocha.Probleme
     @Override
     public boolean verifierContraintes(HashMap<Station,Integer> currentSolution) {
         for (Map.Entry me : currentSolution.entrySet()) { //on parcourt les stations (i dans l'énoncé)

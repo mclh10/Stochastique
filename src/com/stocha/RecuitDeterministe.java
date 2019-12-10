@@ -1,3 +1,5 @@
+package com.stocha;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,7 +22,7 @@ public class RecuitDeterministe extends Recuit {
         //myHm = ensemble des solutions initiales d'un scenario donné
         //Variable de retour
         HashMap<Station, Integer> myHmCourante = new HashMap<Station, Integer>();
-        //HashMap<Station, Integer> myHmMeilleure = new HashMap<Station, Integer>();
+        //HashMap<com.stocha.Station, Integer> myHmMeilleure = new HashMap<com.stocha.Station, Integer>();
         HashMap<Station, Integer> myHmVoisinage = new HashMap<Station, Integer>();
         myHmCourante = myHm;
         myHmMeilleure = myHmCourante;

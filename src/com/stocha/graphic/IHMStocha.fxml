@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="630.0" prefWidth="640.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="graphic.Controller">
+<VBox prefHeight="630.0" prefWidth="640.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.stocha.graphic.Controller">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -99,8 +99,8 @@
                      <children>
                         <Label text="Algorithm" />
                         <ComboBox fx:id="algoComboBox" prefWidth="150.0" GridPane.rowIndex="1" />
-                        <Label text="Total stations" GridPane.columnIndex="1" />
-                        <Spinner fx:id="stationNumberSpinner" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Total scenarios" GridPane.columnIndex="1" />
+                        <Spinner fx:id="stationNumberSpinner" editable="true" min="1" max="1000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="calculateButton" mnemonicParsing="false" text="Calculate" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets />

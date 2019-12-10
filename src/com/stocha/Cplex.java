@@ -1,3 +1,5 @@
+package com.stocha;
+
 import ilog.concert.IloException;
 import ilog.concert.IloLinearNumExpr;
 import ilog.concert.IloNumVar;

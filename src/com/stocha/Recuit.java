@@ -1,3 +1,5 @@
+package com.stocha;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -10,7 +12,7 @@ public abstract class Recuit extends Algorithme {
     private ArrayList<Scenario> scenarioList; //Deterministe = 1 scénario sinon plusieurs pour le stocha
 
 
-    //Constructeur de la classe Recuit
+    //Constructeur de la classe com.stocha.Recuit
     public Recuit(float myTemp, int myNbIt, int myPalierTemp, ArrayList<Scenario> myScenario) {
         this.temperature = myTemp;
         this.nbIterations = myNbIt;
@@ -64,7 +66,7 @@ public abstract class Recuit extends Algorithme {
         return myHmResultat;
     }
 
-    //Renvoie HashMap<Station,Integer> array
+    //Renvoie HashMap<com.stocha.Station,Integer> array
     public HashMap<Station,Integer> runRecuit(HashMap<Station,Integer> array ){
         //TODO
         return null;
