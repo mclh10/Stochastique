@@ -10,14 +10,14 @@ import java.util.HashMap;
 public class Cplex extends Algorithme {
     private File modele;
     public static void main(String[] args) {
-        int n =3;
-        double[] k = {8, 10, 2};
-        double[] c = {3, 3, 4};
-        double[] v = {2, 2, 4};
-        double[] w = {4, 1, 1};
-        double[][] xsi = {{0, 2, 1}, {3, 0, 2}, {3, 2, 0}};
+//        int n =3;
+//        double[] k = {8, 10, 2};
+//        double[] c = {3, 3, 4};
+//        double[] v = {2, 2, 4};
+//        double[] w = {4, 1, 1};
+//        double[][] xsi = {{0, 2, 1}, {3, 0, 2}, {3, 2, 0}};
 
-        solve(n, k, c, v, w, xsi);
+//        solve(n, k, c, v, w, xsi);
 
     }
 
@@ -37,7 +37,6 @@ public class Cplex extends Algorithme {
         try {
 
             // Initialisation variables a determiner
-
             IloCplex cplex = new IloCplex();
             IloNumVar[] x = new IloNumVar[n];
             IloNumVar[] IPlus = new IloNumVar[n];
@@ -59,7 +58,6 @@ public class Cplex extends Algorithme {
                 }
 
             }
-
 
             // Objective function
 
@@ -84,6 +82,7 @@ public class Cplex extends Algorithme {
 
                 }
 
+
             }
             // 2c
             for (int i = 0; i < n; i++) {
@@ -100,7 +99,6 @@ public class Cplex extends Algorithme {
                 );
 
             }
-
             //2d
 
             for (int i = 0; i < n; i++) {
@@ -119,7 +117,6 @@ public class Cplex extends Algorithme {
                 );
 
             }
-
             //solve
             if(cplex.solve()){
                 System.out.println(" -----------------------------------");
@@ -140,7 +137,6 @@ public class Cplex extends Algorithme {
                 System.out.println("Model not solved :(");
 
             }
-
 
 
         } catch(IloException e){
