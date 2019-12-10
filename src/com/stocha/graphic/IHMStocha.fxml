@@ -70,11 +70,11 @@
                         <Insets right="15.0" />
                      </VBox.margin>
                   </TextField>
-                  <Button fx:id="findButton" mnemonicParsing="false" onAction="#testFunction" text="Find">
+                  <!--<Button fx:id="findButton" mnemonicParsing="false" onAction="#testFunction" text="Find">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
-                  </Button>
+                  </Button>-->
                </children>
                <padding>
                   <Insets left="20.0" top="10.0" />
