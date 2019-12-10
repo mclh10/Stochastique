@@ -1,2 +1,4 @@
 # Stochastique
-Stochastique de merde
+
+Interface : exécuter le main du contrôleur
+
