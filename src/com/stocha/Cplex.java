@@ -10,14 +10,36 @@ import java.util.HashMap;
 public class Cplex extends Algorithme {
     private File modele;
     public static void main(String[] args) {
-//        int n =3;
-//        double[] k = {8, 10, 2};
-//        double[] c = {3, 3, 4};
-//        double[] v = {2, 2, 4};
-//        double[] w = {4, 1, 1};
-//        double[][] xsi = {{0, 2, 1}, {3, 0, 2}, {3, 2, 0}};
+        int n =3;
+        double[] k = {8, 10, 2};
+        double[] c = {3, 3, 3};
+        double[] v = {2, 2, 4};
+        double[] w = {4, 1, 1};
+        double[][] xsi = {{0, 2, 1}, {3, 0, 2}, {3, 2, 0}};
+//        System.out.println("n  = " + n);
+//        System.out.print("k = {");
+//        for (int j = 0; j < n; j++) {
+//            System.out.print(k[j] + ", ");
+//        }
+//        System.out.println("};");
+//        System.out.print("c = {");
+//        for (int j = 0; j < n; j++) {
+//            System.out.print(c[j] + ", ");
+//        }
+//        System.out.println("};");
+//        System.out.println("xsi = {");
+//        for (int j = 0; j < n; j++) {
+//            System.out.print("    {");
+//            for (int l = 0; l <n ; l++) {
+//                System.out.print(xsi[j][l] + ", ");
+//            }
+//            System.out.println("}; ");
+//
+//        }
+//        System.out.println("};");
 
-//        solve(n, k, c, v, w, xsi);
+
+        solve(n, k, c, v, w, xsi);
 
     }
 
@@ -57,6 +79,8 @@ public class Cplex extends Algorithme {
                     IMinus[i][j] = cplex.numVar(0, Double.MAX_VALUE);
                 }
 
+
+
             }
 
             // Objective function
@@ -73,12 +97,27 @@ public class Cplex extends Algorithme {
             cplex.addMinimize(objective);
 
 
+
             // Contriantes
+
+            // 2a
+
+            for (int i = 0; i < n; i++) {
+                cplex.addGe(k[i], x[i]);
+
+            }
 
             // 2b
             for (int i = 0; i < n; i++) {
+                IloLinearNumExpr exp = cplex.linearNumExpr();
+
                 for (int j = 0; j < n; j++) {
-                    cplex.addEq(xsi[i][j], cplex.sum(Beta[i][j], IMinus[i][j])); // pe mettre cplex.prod(1, Beta etc.)
+                    // TODO WHY
+//                    exp.addTerm(1, Beta[i][j]);
+//                    exp.addTerm(1, IMinus[i][j]);
+//                    cplex.addEq(exp, xsi[i][j]); // pe mettre cplex.prod(1, Beta etc.)
+
+                    cplex.addEq(xsi[i][j], cplex.sum(cplex.prod(1, Beta[i][j]), cplex.prod(1, IMinus[i][j]))); // pe mettre cplex.prod(1, Beta etc.)
 
                 }
 
@@ -86,15 +125,16 @@ public class Cplex extends Algorithme {
             }
             // 2c
             for (int i = 0; i < n; i++) {
-                double xsitoti = 0;
+                double xsitoti = 0.0;
                 for (int j = 0; j < n; j++) {
                     xsitoti += xsi[i][j];
                 }
-                cplex.addEq((-xsitoti),
+                xsitoti = -xsitoti;
+                cplex.addEq(xsitoti,
                         cplex.sum(
                                 IPlus[i],
-                                cplex.prod( (-1), x[i]),
-                                cplex.prod( (-1), cplex.sum(IMinus[i]))
+                                cplex.prod( -1, x[i]),
+                                cplex.prod( -1, cplex.sum(IMinus[i]))
                         )
                 );
 
@@ -104,19 +144,26 @@ public class Cplex extends Algorithme {
             for (int i = 0; i < n; i++) {
                 IloLinearNumExpr exprLinFori = cplex.linearNumExpr();
                 for (int j = 0; j < n; j++) {
-                    exprLinFori.addTerm(1, Beta[i][j]);
-                    exprLinFori.addTerm( (-1), Beta[j][i]);
+                    exprLinFori.addTerm(-1, Beta[i][j]);
+                    exprLinFori.addTerm( 1, Beta[j][i]);
                 }
-                cplex.addEq(k[i],
-                        cplex.sum(
-                                OPlus[i],
-                                cplex.prod(-1, OPlus[i]),
-                                x[i],
-                                cplex.prod(-1, exprLinFori)
-                        )
-                );
+//                cplex.addEq(k[i],
+//                        cplex.sum(
+//                                OPlus[i],
+//                                cplex.prod(-1, OPlus[i]),
+//                                x[i],
+//                                cplex.prod(-1, exprLinFori)
+//                        )
 
+                exprLinFori.addTerm(1, OPlus[i]);
+                exprLinFori.addTerm(-1, OPlus[i]);
+                exprLinFori.addTerm(1, x[i]);
+                cplex.addEq(k[i], exprLinFori);
             }
+
+
+
+
             //solve
             if(cplex.solve()){
                 System.out.println(" -----------------------------------");
@@ -128,6 +175,8 @@ public class Cplex extends Algorithme {
                     System.out.println("For station " + i + " : ");
                     for (int j = 0; j < n; j++) {
                         System.out.println("Beta[ " + i + " ][ " + j + " ] = " + cplex.getValue(Beta[i][j]));
+                        System.out.println("Iminus[ " + i + " ][ " + j + " ] = " + cplex.getValue(IMinus[i][j]));
+
 
                     }
                     System.out.println("Reduced cost = " + cplex.getReducedCost(x[i]));
@@ -135,6 +184,7 @@ public class Cplex extends Algorithme {
                 }
             } else{
                 System.out.println("Model not solved :(");
+                System.out.println(cplex.getStatus().toString());
 
             }
 

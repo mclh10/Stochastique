@@ -2,6 +2,7 @@ package com.stocha;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
@@ -48,22 +49,73 @@ public class Main {
 //        }
 
         // parsing the vls problem into the variables for cplex
+        Random r = new Random();
+
         int i = 0;
+        double[] temp = new double[n];
+        int count = 0;
+        int maxite = 3;
         for(Station s : vls.getMesStations()){
-            k[i] = s.getKi();
-            c[i] = s.getCi();
-            int j = 0;
-            for(Station s2 : vls.getMesStations()){
-                xsi[i][j]= (double) s.getXiij().get(s2);
-                j++;
+            if(i < maxite) {
+
+                k[i] = (double) s.getKi();
+//                if(k[i] == 0){
+//                    k[i] = (double)  r.nextInt(20);
+//                }
+                c[i] =  (double) s.getCi();
+//                if(c[i] == 0.0){
+//                    c[i] = (double) r.nextInt(10);
+//                }
+                int j = 0;
+
+                for (Station s2 : vls.getMesStations()) {
+                    if(j<maxite) {
+                        xsi[i][j] = (double) s.getXiij().get(s2);
+                        if (xsi[i][j] < 0.0) {
+                            temp[count] = xsi[i][j];
+                            count++;
+                            xsi[i][j] = 0.0;
+                        }
+                        j++;
+                    }
+                }
+                i++;
             }
-            i++;
         }
+
+        System.out.println("Found " + count + "xsi negative values");
+        System.out.print("values : {");
+        for (int h = 0; h < count; h++) {
+            System.out.print(temp[h] + ", ");
+        }
+        System.out.println("}; ");
+
+        System.out.println("n  = " + i);
+        System.out.print("k = {");
+        for (int j = 0; j < i; j++) {
+            System.out.print(k[j] + ", ");
+        }
+        System.out.println("};");
+        System.out.print("c = {");
+        for (int j = 0; j < i; j++) {
+            System.out.print(c[j] + ", ");
+        }
+        System.out.println("};");
+        System.out.println("xsi = {");
+        for (int j = 0; j < i; j++) {
+            System.out.print("    {");
+            for (int l = 0; l <i ; l++) {
+                System.out.print(xsi[j][l] + ", ");
+            }
+            System.out.println("}; ");
+
+        }
+        System.out.println("};");
 
 
 
         // solving the problem with cplex
-        Cplex.solve(n, k, c, v, w, xsi);
+        Cplex.solve(i, k, c, v, w, xsi);
 
     }
 }
