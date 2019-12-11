@@ -1,5 +1,6 @@
 package com.stocha.graphic;
 
+import com.stocha.Main;
 import com.stocha.ProblemeVLS;
 import com.stocha.Station;
 import javafx.fxml.FXML;
@@ -7,6 +8,8 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 
 import java.util.HashMap;
+
+import static com.stocha.Cplex.solve;
 
 enum Algo {
     RECUITDETER("Recuit déterministe"),
@@ -64,14 +67,26 @@ public class Controller {
 
                 switch (algoComboBox.getValue()) {
                     case CPLEX:
+                        int n =3;
+                        double[] k = {8, 10, 2};
+                        double[] c = {3, 3, 3};
+                        double[] v = {2, 2, 4};
+                        double[] w = {4, 1, 1};
+                        double[][] xsi = {{0, 2, 1}, {3, 0, 2}, {3, 2, 0}};
+//                        solve(n, k, c, v, w, xsi);
+//                        resultTextArea.setText(solve(n, k, c, v, w, xsi));
+                        resultTextArea.setText(Main.solveWithData(vls));
                         break;
                     case RECUITSTO:
+                        float res = vls.calculFctObjectif(sol);
+                        resultTextArea.setText("résultat fonction objectif : " + res);
                         break;
                     case RECUITDETER:
+                        float res2 = vls.calculFctObjectif(sol);
+                        resultTextArea.setText("résultat fonction objectif : " + res2);
                         break;
                 }
-                float res = vls.calculFctObjectif(sol);
-                resultTextArea.setText("résultat fonction objectif : " + res);
+
                 calculateButton.setDisable(false);
             }).start();
         }

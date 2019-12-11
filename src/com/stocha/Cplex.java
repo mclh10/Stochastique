@@ -54,7 +54,7 @@ public class Cplex extends Algorithme {
      * @param w Cost linked to the time lost by a user when there are no free slot at station i
      * @param xsi Demand to go from i to j
      */
-    public static void solve(int n, double[] k, double[] c, double[] v, double[] w, double[][] xsi) {
+    public static String solve(int n, double[] k, double[] c, double[] v, double[] w, double[][] xsi) {
 
         try {
 
@@ -166,25 +166,45 @@ public class Cplex extends Algorithme {
 
             //solve
             if(cplex.solve()){
-                System.out.println(" -----------------------------------");
-                System.out.println("SOLVED");
-                System.out.println(" -----------------------------------");
-                System.out.println("objective_value = " + cplex.getObjValue());
+                String res = " SOLVED \n";
+
+                res += "objective_value = " + cplex.getObjValue() + '\n';
                 for (int i = 0; i < n ; i++) {
-                    System.out.println("x[ " + i + " ] = " + cplex.getValue(x[i]));
-                    System.out.println("For station " + i + " : ");
+                    res += "x[ " + i + " ] = " + cplex.getValue(x[i]) + '\n';
+                    res += "For station " + i + " : \n";
                     for (int j = 0; j < n; j++) {
-                        System.out.println("Beta[ " + i + " ][ " + j + " ] = " + cplex.getValue(Beta[i][j]));
-                        System.out.println("Iminus[ " + i + " ][ " + j + " ] = " + cplex.getValue(IMinus[i][j]));
+                        res+= "Beta[ " + i + " ][ " + j + " ] = " + cplex.getValue(Beta[i][j]) + '\n';
+                        res += "Iminus[ " + i + " ][ " + j + " ] = " + cplex.getValue(IMinus[i][j]) + '\n';
 
 
                     }
-                    System.out.println("Reduced cost = " + cplex.getReducedCost(x[i]));
-                    System.out.println();
+//                    System.out.println("Reduced cost = " + cplex.getReducedCost(x[i]));
+//                    System.out.println();
+//
+//                    System.out.println(" -----------------------------------");
+//                    System.out.println("SOLVED");
+//                    System.out.println(" -----------------------------------");
+//                    System.out.println("objective_value = " + cplex.getObjValue());
+//                    for (int i = 0; i < n ; i++) {
+//                        System.out.println("x[ " + i + " ] = " + cplex.getValue(x[i]));
+//                        System.out.println("For station " + i + " : ");
+//                        for (int j = 0; j < n; j++) {
+//                            System.out.println("Beta[ " + i + " ][ " + j + " ] = " + cplex.getValue(Beta[i][j]));
+//                            System.out.println("Iminus[ " + i + " ][ " + j + " ] = " + cplex.getValue(IMinus[i][j]));
+//
+//
+//                        }
+//                        System.out.println("Reduced cost = " + cplex.getReducedCost(x[i]));
+//                        System.out.println();
                 }
+                return res;
+
             } else{
-                System.out.println("Model not solved :(");
-                System.out.println(cplex.getStatus().toString());
+                String fail = "Model not solved :(\n";
+//                System.out.println("Model not solved :(");
+                fail += cplex.getStatus().toString() + '\n';
+//                System.out.println(cplex.getStatus().toString());
+                return fail;
 
             }
 
@@ -192,6 +212,7 @@ public class Cplex extends Algorithme {
         } catch(IloException e){
             System.out.println("cplex solve threw exception");
             e.printStackTrace();
+            return "threw exception";
         }
 
     }
